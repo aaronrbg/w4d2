@@ -15,26 +15,16 @@ const knex = require('knex')({
     connection
 });
 
-const search = process.argv[2];
+const insert = [process.argv[2], process.argv[3], process.argv[4]];
 
-newQuery(search);
+newInsert(insert);
   
-function newQuery(search) {
-    knex.select().from('famous_people').where({first_name: search}).asCallback((error, result) => {
+function newInsert(insert) {
+    knex('famous_people').insert({first_name: insert[0], last_name: insert[1], birthdate: insert[2]}).asCallback((error, result) => {
         if (error) {
                 return console.error("error running query", error);
                 }
-        console.log(`Found ${result.length} person(s) matching ${search}:`)
-
-    printQuery(result);
-
+        console.log(`Insert success`);
     knex.destroy()
     });
-  }
-  
-  function printQuery(result) {
-      result.forEach( (row, resultIndex) => {
-          born = row.birthdate.toString().substring(4,15);
-          console.log(`- ${resultIndex + 1}: ${row.first_name} ${row.last_name}, born ${born}`);
-          });
   }
